@@ -1,15 +1,14 @@
 import React, {Component} from 'react';
-import {usersWithAddress} from "./arrayOfUsers/usersList";
-import UserComponent from "./components/user/UserComponent";
+import AllPosts from "./components/all-posts/AllPosts";
+import AllUsers from "./components/all-users/AllUsers";
 
 class App extends Component {
     render() {
 
         return (
             <div>
-                {
-                    usersWithAddress.map(user => (<UserComponent someone = {user} key = {user.id}/>))
-                }
+                <AllUsers/>
+                <AllPosts/>
             </div>
         );
     }
