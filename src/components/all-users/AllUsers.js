@@ -1,33 +1,32 @@
 import React, {Component} from 'react';
 import User from "../user/User";
-import './Users.css'
+import {UserService} from "../../services/user-service/UserService";
 
 class AllUsers extends Component {
-    state = {users: [], btn: null}
 
-    chosenBtn = (id) =>{
-        let {users} = this.state;
-        let finderUser = users.find(value => value.id === id);
-        this.setState({btn: finderUser});
-    }
+    userService = new UserService();
+
+    state = {users: [], someone: null};
+
+    chooseUser = (id) =>
+        this.userService.getSomeUser(id)
+            .then(value => this.setState({someone: value}));
 
     componentDidMount() {
-        fetch('http://jsonplaceholder.typicode.com/users')
-            .then(value => value.json())
-            .then(users =>{
-                this.setState({users});
-            });
+        this.userService.getAllUsers().then(value => this.setState({users: value}));
     }
 
     render() {
-        let {users, btn} = this.state
+        let {users, someone} = this.state;
+
         return (
-            <div className={'forUsers'}>
+            <div>
                 {
-                    users.map(user => <User item = {user} key = {user.id} chosenBtn = {this.chosenBtn}/>)
+                    users.map(value => <User item = {value} key = {value.id} chooseUser = {this.chooseUser}
+                                             isBtn = {true}/>)
                 }
                 {
-                    btn && <User item = {btn}/>
+                    someone && <User item = {someone} isBtn = {false}/>
                 }
             </div>
         );
