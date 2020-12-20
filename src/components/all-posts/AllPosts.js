@@ -1,35 +1,24 @@
 import React, {Component} from 'react';
-import {PostService} from "../../services/post-service/PostService";
-import Post from "../post/Post";
+import PostService from "../../service/postService";
+import Post from "../post/post";
 
 class AllPosts extends Component {
-
     postService = new PostService();
 
-    state = {posts: [], post: null};
+    state = {posts: []};
 
-    componentDidMount() {
-        this.postService.getAllPosts()
-            .then(value => this.setState({posts: value}));
+    async componentDidMount() {
+        let posts = await this.postService.posts();
+        this.setState({posts})
     }
 
-    onePost = (id) => this.postService.getSomePost(id).then(value => this.setState({post: value}));
-
-
     render() {
-
-        let {posts, post} = this.state;
-
+        let {posts} = this.state;
         return (
             <div>
                 {
-                    posts.map(value => <Post item ={value} key = {value.id} onePost = {this.onePost}
-                                             isShowBtn = {true}/>)
+                    posts.map(value => <Post item = {value} key = {value.id}/>)
                 }
-                {
-                    post && <Post item = {post} isShowBtn = {false}/>
-                }
-
             </div>
         );
     }
